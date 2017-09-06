@@ -14,5 +14,6 @@
     "psr-4": {
       "Wxm\\DDoc\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "dev"
 }
