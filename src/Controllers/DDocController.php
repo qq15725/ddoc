@@ -1,6 +1,7 @@
 <?php
 namespace Wxm\DDoc\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 class DDocController extends Controller
 {
@@ -28,6 +29,12 @@ class DDocController extends Controller
     public function index()
     {
         $tables = $this->initTablesData();
+
+        Artisan::call('api:docs', [
+            '--name' => config('app.name', ''),
+            '--output-file' => public_path('api.md')
+        ]);
+
         return view('ddoc::index', compact('tables'));
     }
 }

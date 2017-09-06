@@ -14,8 +14,18 @@
 <script src="https://unpkg.com/docute/dist/docute.js"></script>
 <!-- bootstrap your docute app! -->
 <script>
-var database_md = function() {
-var fun = function() {/*
+
+    var readme_md = function () {/*
+<h1 align="center">readme.md</h1>
+
+<a href="https://github.com/dingo/api/wiki/API-Blueprint-Documentation">
+    API Blueprint Documentation
+</a> for <a href="https://github.com/dingo/api">dingo/api</a>
+
+    */}
+
+    var database_md = function() {/*
+
 ## {{ config('app.name', '') }} 数据字典
 
 @foreach($tables as $key => $table)
@@ -23,29 +33,40 @@ var fun = function() {/*
 ## {{ $table->Comment }} {{ $table->Name }}
 
 字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注
---- | --- | --- | -- | ----- | --- | ---
+ --- | --- | --- | -- | ----- | --- | ---
 @foreach($table->columns as $column)
 {{ $column->Field }} | {{ $column->Type }} | {{ $column->Null }} | {{ $column->Key }} | {{ $column->Default }} | {{ $column->Extra }} | {{ $column->Comment }}
 @endforeach
 
 @endforeach
-*/}
 
-var lines = fun.toString();
-lines = lines.substring(lines.indexOf("/*") + 2, lines.lastIndexOf("*/"));
-/* 这里只处理一些常见的转义 */
-lines = lines.replace(/\\n/g, "\n");
-lines = lines.replace(/\\r/g, "\r");
-return lines.replace(/\\t/g, "\t");
-}();
+        */}
+
+    function toStr (str) {
+        var lines = str.toString();
+        lines = lines.substring(lines.indexOf("/*") + 2, lines.lastIndexOf("*/"));
+        lines = lines.replace(/\\n/g, "\n");
+        lines = lines.replace(/\\r/g, "\r");
+        return lines.replace(/\\t/g, "\t");
+    };
 
     docute.init({
         nav: [
             {
-                title: '数据库信息',
+                title: 'readme',
                 path: '/',
-                markdown: database_md
+                markdown: toStr(readme_md)
             },
+            {
+                title: '接口文档',
+                path: '/api',
+                source: '/api.md'
+            },
+            {
+                title: '数据库字典',
+                path: '/database',
+                markdown: toStr(database_md)
+            }
         ]
     })
 </script>
