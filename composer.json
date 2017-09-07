@@ -17,7 +17,11 @@
   ],
   "require": {
     "php": "^5.5.9 || ^7.0",
-    "dingo/blueprint": "0.2.*"
+    "dingo/blueprint": "0.2.*",
+    "illuminate/support": "^5.1"
+  },
+  "require-dev": {
+    "illuminate/filesystem": "^5.1"
   },
   "autoload": {
     "psr-4": {
