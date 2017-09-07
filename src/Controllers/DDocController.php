@@ -1,10 +1,42 @@
 <?php
 namespace Wxm\DDoc\Controllers;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Artisan;
+use Dingo\Blueprint\Blueprint;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
+use ReflectionClass;
+
+
 class DDocController extends Controller
 {
+
+    protected $router;
+
+    /**
+     * Router instance.
+     *
+     * @var \Dingo\Api\Routing\Router
+     */
+    protected $dinGoRouter = null;
+
+    /**
+     * The blueprint instance.
+     *
+     * @var \Dingo\Blueprint\Blueprint
+     */
+    protected $blueprint;
+
+    public function __construct(Router $router, Blueprint $blueprint)
+    {
+        $this->router = $router;
+        if (class_exists(\Dingo\Api\Routing\Router::class)) {
+            $this->dinGoRouter = app(\Dingo\Api\Routing\Router::class);
+        }
+        $this->blueprint = $blueprint;
+    }
+
     /**
      * 读取数据库信息
      */
@@ -30,11 +62,87 @@ class DDocController extends Controller
     {
         $tables = $this->initTablesData();
 
-        Artisan::call('api:docs', [
-            '--name' => config('app.name', ''),
-            '--output-file' => public_path('api.md')
-        ]);
+        $apiDoc = $this->blueprint->generate($this->getControllers(), $this->getDocName(), $this->getVersion());
 
-        return view('ddoc::index', compact('tables'));
+        return view('ddoc::index', compact('tables', 'apiDoc'));
+    }
+
+    /**
+     * Get the documentation name.
+     *
+     * @return string
+     */
+    protected function getDocName()
+    {
+        return config('app.name', '') . ' 接口文档';
+    }
+
+    /**
+     * Get the documentation version.
+     *
+     * @return string
+     */
+    protected function getVersion()
+    {
+        return 'v1';
+    }
+
+    /**
+     * Get all the controller instances.
+     *
+     * @return array
+     */
+    protected function getControllers()
+    {
+        $controllers = new Collection;
+
+        foreach ($this->router->getRoutes() as $collections) {
+            if (!is_null($collections->controller)) {
+                $this->addControllerIfNotExists($controllers, $collections->controller);
+            }
+        }
+
+        if (!is_null($this->dinGoRouter)) {
+            foreach ($this->dinGoRouter->getRoutes() as $collections) {
+                foreach ($collections as $route) {
+                    if ($controller = $route->getControllerInstance()) {
+                        $this->addControllerIfNotExists($controllers, $controller);
+                    }
+                }
+            }
+        }
+
+        return $controllers;
+    }
+
+    /**
+     * Add a controller to the collection if it does not exist. If the
+     * controller implements an interface suffixed with "Docs" it
+     * will be used instead of the controller.
+     *
+     * @param \Illuminate\Support\Collection $controllers
+     * @param object                         $controller
+     *
+     * @return void
+     */
+    protected function addControllerIfNotExists(Collection $controllers, $controller)
+    {
+        $class = get_class($controller);
+
+        if ($controllers->has($class)) {
+            return;
+        }
+
+        $reflection = new ReflectionClass($controller);
+
+        $interface = Arr::first($reflection->getInterfaces(), function ($key, $value) {
+            return ends_with($key, 'Docs');
+        });
+
+        if ($interface) {
+            $controller = $interface;
+        }
+
+        $controllers->put($class, $controller);
     }
 }

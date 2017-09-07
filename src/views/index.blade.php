@@ -9,6 +9,23 @@
     <link rel="stylesheet" href="https://unpkg.com/docute/dist/docute.css">
 </head>
 <body>
+<pre id="api-doc" style="display: none">{{ $apiDoc }}</pre>
+<pre id="database-doc" style="display: none">
+## {{ config('app.name', '') }} 数据字典
+
+@foreach($tables as $key => $table)
+
+## {{ $table->Comment }} {{ $table->Name }}
+
+字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注
+--- | --- | --- | -- | ----- | --- | ---
+@foreach($table->columns as $column)
+{{ $column->Field }} | {{ $column->Type }} | {{ $column->Null }} | {{ $column->Key }} | {{ $column->Default }} | {{ $column->Extra }} | {{ $column->Comment }}
+@endforeach
+
+@endforeach
+</pre>
+
 <div id="app"></div>
 <!-- load the docute client library -->
 <script src="https://unpkg.com/docute/dist/docute.js"></script>
@@ -21,26 +38,7 @@
 <a href="https://github.com/dingo/api/wiki/API-Blueprint-Documentation">
     API Blueprint Documentation
 </a> for <a href="https://github.com/dingo/api">dingo/api</a>
-
     */}
-
-    var database_md = function() {/*
-
-## {{ config('app.name', '') }} 数据字典
-
-@foreach($tables as $key => $table)
-
-## {{ $table->Comment }} {{ $table->Name }}
-
-字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注
- --- | --- | --- | -- | ----- | --- | ---
-@foreach($table->columns as $column)
-{{ $column->Field }} | {{ $column->Type }} | {{ $column->Null }} | {{ $column->Key }} | {{ $column->Default }} | {{ $column->Extra }} | {{ $column->Comment }}
-@endforeach
-
-@endforeach
-
-        */}
 
     function toStr (str) {
         var lines = str.toString();
@@ -60,12 +58,12 @@
             {
                 title: '接口文档',
                 path: '/api',
-                source: '/api.md'
+                markdown: document.getElementById('api-doc').innerHTML
             },
             {
                 title: '数据库字典',
                 path: '/database',
-                markdown: toStr(database_md)
+                markdown: document.getElementById('database-doc').innerHTML
             }
         ]
     })

@@ -1,6 +1,12 @@
 {
   "name": "wxm/ddoc",
-  "description": "输出数据库字典",
+  "description": "基于 laravel 框架, 数据库字典和api接口文档生成",
+  "keywords": [
+    "api",
+    "database",
+    "laravel",
+    "documentation"
+  ],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -9,7 +15,10 @@
       "email": "157215725@qq.com"
     }
   ],
-  "require": {},
+  "require": {
+    "php": "^5.5.9 || ^7.0",
+    "dingo/blueprint": "0.2.*"
+  },
   "autoload": {
     "psr-4": {
       "Wxm\\DDoc\\": "src/"
