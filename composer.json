@@ -17,7 +17,8 @@
   ],
   "require": {
     "php": "^5.5.9 || ^7.0",
-    "dingo/blueprint": "0.2.*",
+    "phpdocumentor/reflection": "3.x@dev",
+    "dingo/blueprint": "0.2.*"
   },
   "autoload": {
     "psr-4": {
