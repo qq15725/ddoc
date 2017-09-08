@@ -2,6 +2,7 @@
 namespace Wxm\DDoc\Controllers;
 use App\Http\Controllers\Controller;
 use Dingo\Blueprint\Blueprint;
+use Illuminate\Container\Container;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -17,7 +18,7 @@ class DDocController extends Controller
     /**
      * Router instance.
      *
-     * @var \Dingo\Api\Routing\Router
+     * @var null || \Dingo\Api\Routing\Router
      */
     protected $dinGoRouter = null;
 
@@ -31,10 +32,12 @@ class DDocController extends Controller
     public function __construct(Router $router, Blueprint $blueprint)
     {
         $this->router = $router;
-        if (class_exists(\Dingo\Api\Routing\Router::class)) {
+
+        $this->blueprint = $blueprint;
+
+        if (class_exists('\Dingo\Api\Routing\Router')) {
             $this->dinGoRouter = app(\Dingo\Api\Routing\Router::class);
         }
-        $this->blueprint = $blueprint;
     }
 
     /**
@@ -97,8 +100,10 @@ class DDocController extends Controller
         $controllers = new Collection;
 
         foreach ($this->router->getRoutes() as $collections) {
-            if (!is_null($collections->controller)) {
-                $this->addControllerIfNotExists($controllers, $collections->controller);
+            $action = $collections->action['uses'];
+            if (is_string($action)) {
+                list($controllerClass, $controllerMethod) = explode('@', $action);
+                $this->addControllerIfNotExists($controllers, app($controllerClass));
             }
         }
 
