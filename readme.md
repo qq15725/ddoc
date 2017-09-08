@@ -1,17 +1,32 @@
+基于 laravel 框架, 读取数据库信息生成数据库字典, 通过控制器注释生成API接口文档, 注册 ddoc 路由网页形式呈现
+
+> 1. 前端呈现使用的 [docute](https://docute.js.org).
+> 2. API 注释生成采用的 [dingo/blueprint](https://github.com/dingo/blueprint).
+
 ## 安装
+    
+直接从 composer.json 添加, 执行 `composer update` 安装.
 
-composer.json 添加
-
+```php
+"require": {
+    "wxm/ddoc": "1.0.*@dev"
+},
 ```
-"wxm/ddoc": "dev-master"
+
+或者 composer require 安装. 某些环境原因会导致这种方式安装失败.  
+    
+```bash
+composer require wxm/ddoc:1.0.x@dev 
 ```
 
-执行 composer update
+## 接口注释 生成文档
+
+参考 [API Blueprint Documentation](https://github.com/dingo/api/wiki/API-Blueprint-Documentation).
+
+## 参考图
 
 ![](http://o9o0gmgkr.bkt.clouddn.com/8CA07792-66BE-495F-87B8-825EFABE048D.png)
 
-基于 laravel 框架的快速建立数据库字典及接口文档包, 前端使用的 [docute](https://docute.js.org).
+## License
 
-## 接口文档生成
-
-使用了 dingo/blueprint 包,文档在这 [API Blueprint Documentation](https://github.com/dingo/api/wiki/API-Blueprint-Documentation).
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
