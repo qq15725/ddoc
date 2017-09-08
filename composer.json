@@ -1,28 +1,50 @@
 {
   "name": "wxm/ddoc",
-  "description": "基于 laravel 框架, 数据库字典和api接口文档生成",
+  "type": "library",
+  "description": "基于 laravel 框架, 读取数据库信息生成数据库字典, 通过控制器注释生成API接口文档, 注册 ddoc 路由网页形式呈现",
   "keywords": [
     "api",
     "database",
-    "laravel",
-    "documentation"
+    "doc",
+    "laravel"
   ],
-  "type": "library",
+  "homepage": "https://github.com/qq15725/ddoc",
   "license": "MIT",
   "authors": [
     {
       "name": "wxm",
-      "email": "157215725@qq.com"
+      "email": "157215725@qq.com",
+      "role": "Developer"
     }
   ],
   "require": {
-     "php": "^5.5.9 || ^7.0",
+    "illuminate/support": "5.0.x|5.1.x|5.2.x|5.3.x|5.4.x",
+    "php": "^5.5.9 || ^7.0",
      "dingo/blueprint": "0.2.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit" : "~4.0||~5.0"
   },
   "autoload": {
     "psr-4": {
-      "Wxm\\DDoc\\": "src/"
+      "Wxm\\DDoc\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Wxm\\DDoc\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
   "minimum-stability": "dev"
 }
