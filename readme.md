@@ -19,6 +19,18 @@
 composer require wxm/ddoc:1.0.x@dev 
 ```
 
+## 配置
+
+注册 ServiceProvider:
+	
+```php
+Wxm\DDoc\DDocServiceProvider::class,
+```
+	
+## 使用
+
+访问 `[http|https]://[your domain or ip]/ddoc`
+
 ## 接口注释 生成文档
 
 参考 [API Blueprint Documentation](https://github.com/dingo/api/wiki/API-Blueprint-Documentation).
