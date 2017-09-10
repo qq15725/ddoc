@@ -2,7 +2,7 @@
 namespace Wxm\DDoc\Controllers;
 use App\Http\Controllers\Controller;
 use Dingo\Blueprint\Blueprint;
-use Illuminate\Container\Container;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -45,10 +45,8 @@ class DDocController extends Controller
      */
     private function initTablesData()
     {
-        //获取数据库表名称列表
         $tables = DB::select('SHOW TABLE STATUS ');
         foreach ($tables as $key => $table) {
-            //获取改表的所有字段信息
             $columns = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
             $table->columns = $columns;
             $tables[$key] = $table;
@@ -61,13 +59,65 @@ class DDocController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tables = $this->initTablesData();
+        return view('ddoc::index');
+    }
 
-        $apiDoc = $this->blueprint->generate($this->getControllers(), $this->getDocName(), $this->getVersion());
+    public function login(Request $request)
+    {
+        $request->session()->put('ddoc_password', $request->input('password'));
+        return redirect('/ddoc');
+    }
 
-        return view('ddoc::index', compact('tables', 'apiDoc'));
+    public function readme()
+    {
+        if (!$this->auth()) {
+            return '请登录';
+        }
+
+        return config('ddoc.readme');
+    }
+
+    public function apiDoc()
+    {
+        if (!$this->auth()) {
+            return '请登录';
+        }
+
+        return $this->blueprint->generate(
+            $this->getControllers(),
+            $this->getDocName(),
+            $this->getVersion()
+        );
+    }
+
+    public function databaseDoc()
+    {
+        if (!$this->auth()) {
+            return '请登录';
+        }
+
+        $title = config('app.name', '') . ' 数据字典';
+
+        $markdown = "## {$title} \r\n";
+        foreach($this->initTablesData() as $key => $table) {
+            $markdown .= "## {$table->Comment} {$table->Name} \r\n";
+            $markdown .= "字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注 \r\n";
+            $markdown .= "--- | --- | --- | -- | ----- | --- | --- \r\n";
+            foreach($table->columns as $column) {
+                $markdown .= "{$column->Field} | {$column->Type} | {$column->Null} | {$column->Key} | {$column->Default} | {$column->Extra} | {$column->Comment} \r\n";
+            }
+        }
+        return $markdown;
+    }
+
+    protected function auth()
+    {
+        if (config('ddoc.auth.enable', true)) {
+            return session()->get('ddoc_password') == config('ddoc.auth.password', 'root');
+        }
+        return true;
     }
 
     /**

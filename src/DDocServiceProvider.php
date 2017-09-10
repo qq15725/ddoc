@@ -14,13 +14,12 @@ class DDocServiceProvider extends ServiceProvider
     public function boot()
     {
         // 发布视图文件
-        $this->loadViewsFrom(__DIR__.'/views', 'ddoc');
+        $this->loadViewsFrom(__DIR__ . '/views', 'ddoc');
 
         // 发布配置文件
         $this->publishes([
             __DIR__ . '/../config/ddoc.php' => config_path('ddoc.php'),
-            __DIR__ . '/views' => base_path('resources/views/vendor/ddoc'),
-//            __DIR__ . '/../public/' => public_path('')
+            __DIR__ . '/../public/' => public_path('')
         ]);
 
         // 注册路由

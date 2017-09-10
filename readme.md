@@ -21,11 +21,17 @@ composer require wxm/ddoc:1.0.x@dev
 
 ## 配置
 
-注册 ServiceProvider:
+1. 注册 ServiceProvider:
+    ```php
+    Wxm\DDoc\DDocServiceProvider::class
+    ```
+    
+2. 创建配置文件：
+    ```shell
+    php artisan vendor:publish
+    ```
 	
-```php
-Wxm\DDoc\DDocServiceProvider::class,
-```
+	执行命令后会在 `config` 目录下生成配置文件, 在 `public/vendor` 下生成资源文件。
 	
 ## 使用
 
@@ -37,7 +43,10 @@ Wxm\DDoc\DDocServiceProvider::class,
 
 ## 参考图
 
-![](http://o9o0gmgkr.bkt.clouddn.com/8CA07792-66BE-495F-87B8-825EFABE048D.png)
+![](http://o9o0gmgkr.bkt.clouddn.com/1.png)
+![](http://o9o0gmgkr.bkt.clouddn.com/2.png)
+![](http://o9o0gmgkr.bkt.clouddn.com/3.png)
+![](http://o9o0gmgkr.bkt.clouddn.com/4.png)
 
 ## License
 
