@@ -150,7 +150,7 @@ class DDocController extends Controller
         $controllers = new Collection;
 
         foreach ($this->router->getRoutes() as $collections) {
-            $action = $collections->action['uses'];
+            $action = $collections->getAction()['uses'];
             if (is_string($action)) {
                 list($controllerClass, $controllerMethod) = explode('@', $action);
                 $this->addControllerIfNotExists($controllers, app($controllerClass));
