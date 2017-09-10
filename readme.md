@@ -2,6 +2,7 @@
 
 > 1. 前端呈现使用的 [docute](https://docute.js.org).
 > 2. API 注释生成采用的 [dingo/blueprint](https://github.com/dingo/blueprint).
+> 3. 参考了 [jormin/laravel-ddoc](https://github.com/jormin/laravel-ddoc).
 
 ## 安装
     
