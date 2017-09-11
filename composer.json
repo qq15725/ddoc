@@ -17,8 +17,13 @@
       "role": "Developer"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/qq15725/blueprint"
+    }
+  ],
   "require": {
-    "illuminate/support": "5.0.x|5.1.x|5.2.x|5.3.x|5.4.x",
     "php": "^5.5.9 || ^7.0",
     "dingo/blueprint": "0.2.*"
   },
@@ -39,6 +44,11 @@
     "test": "phpunit"
   },
   "extra": {
+    "laravel": {
+      "providers": [
+        "Wxm\\DDoc\\DDocServiceProvider"
+      ]
+    },
     "branch-alias": {
       "dev-master": "1.0-dev"
     }

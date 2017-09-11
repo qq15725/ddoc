@@ -13,19 +13,26 @@ class DDocServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // 发布视图
+        $this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'ddoc');
+
         // 发布视图文件
-        $this->loadViewsFrom(__DIR__ . '/views', 'ddoc');
+        $this->publishes([
+            dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/ddoc'),
+        ], 'views');
 
         // 发布配置文件
         $this->publishes([
-            __DIR__ . '/../config/ddoc.php' => config_path('ddoc.php'),
-            __DIR__ . '/../public/' => public_path('')
-        ]);
+            dirname(__DIR__) . '/config/ddoc.php' => config_path('ddoc.php'),
+        ], 'config');
+
+        // 发布资源文件
+        $this->publishes([
+            dirname(__DIR__) . '/assets' => public_path('vendor/ddoc')
+        ], 'public');
 
         // 注册路由
-        if (! $this->app->routesAreCached()) {
-            require __DIR__ . '/routes.php';
-        }
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 
     /**
