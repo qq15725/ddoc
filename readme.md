@@ -35,13 +35,16 @@ composer.json 添加, `composer update` 安装.
     Wxm\DDoc\DDocServiceProvider::class
     ```
     
-2. 创建配置文件：
+2. 发布配置、资源、视图文件：
     ```shell
-    php artisan vendor:publish
+    php artisan vendor:publish --force
     ```
-	
-	执行命令后会在 `config` 目录下生成配置文件, 在 `public/vendor` 下生成资源文件。
-	
+    
+    laravel 5.5 可以指定标签分别为 config、public、views, 示例 (只有 public 必须):
+    ```shell
+    php artisan vendor:publish --tag=public --force
+    ```
+    
 ## 使用
 
 1. 开启服务器:
@@ -52,6 +55,8 @@ composer.json 添加, `composer update` 安装.
 2. 访问 `http://localhost:8000/ddoc`
 
     默认开启验证, 验证密码 `root`
+
+
 
 ## 接口注释 生成文档
 
