@@ -14,7 +14,7 @@ composer.json 添加, `composer update` 安装.
 },
 ```
 
-支持 laravel 5.5 需要添加, `composer update` 安装.  
+支持 laravel 5.5 需要添加 `repositories` , `composer update` 安装.  
 
 ```php
 "repositories": [
