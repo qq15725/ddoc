@@ -14,20 +14,6 @@ composer.json 添加, `composer update` 安装.
 },
 ```
 
-支持 laravel 5.5 需要添加 `repositories` , `composer update` 安装.  
-
-```php
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/qq15725/blueprint"
-    }
-],
-"require": {
-    "wxm/ddoc": "1.0.*@dev"
-},
-```
-
 ## 配置
 
 1. 注册 ServiceProvider (laravel 5.5 不需要注册):
@@ -37,12 +23,7 @@ composer.json 添加, `composer update` 安装.
     
 2. 发布配置、资源、视图文件：
     ```shell
-    php artisan vendor:publish --force
-    ```
-    
-    laravel 5.5 可以指定标签分别为 config、public、views, 示例 (只有 public 必须):
-    ```shell
-    php artisan vendor:publish --tag=public --force
+    php artisan vendor:publish --provider="Wxm\DDoc\DDocServiceProvider" --force
     ```
     
 ## 使用
