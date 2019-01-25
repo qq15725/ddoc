@@ -2,12 +2,8 @@
 
 ## 安装
     
-composer.json 添加, `composer update` 安装.
-
-```php
-"require-dev": {
-    "wxm/ddoc": "1.0.*@dev"
-},
+```
+composer require wxm/ddoc --dev
 ```
 
 ## 配置
