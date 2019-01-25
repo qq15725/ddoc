@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class DDocServiceProvider extends ServiceProvider
 {
+
     /**
      * Bootstrap the application services.
      *
@@ -13,23 +14,20 @@ class DDocServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // 发布视图
-        $this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'ddoc');
+        // 发布配置
+        $configPath = dirname(__DIR__) . '/config/ddoc.php';
+        if (function_exists('config_path')) {
+            $configPublishPath = config_path('ddoc.php');
+        } else {
+            $configPublishPath = base_path('config/ddoc.php');
+        }
+        $this->publishes([$configPath => $configPublishPath], 'config');
 
-        // 发布视图文件
-        $this->publishes([
-            dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/ddoc'),
-        ], 'views');
-
-        // 发布配置文件
-        $this->publishes([
-            dirname(__DIR__) . '/config/ddoc.php' => config_path('ddoc.php'),
-        ], 'config');
-
-        // 发布资源文件
-        $this->publishes([
-            dirname(__DIR__) . '/assets' => public_path('vendor/ddoc')
-        ], 'public');
+        // 注册视图
+        if ($this->app->has('view')) {
+            $viewPath = dirname(__DIR__) . '/resources/views';
+            $this->loadViewsFrom($viewPath, 'ddoc');
+        }
 
         // 注册路由
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
@@ -42,6 +40,10 @@ class DDocServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if (method_exists($this->app, 'configure')) {
+            $this->app->configure('ddoc');
+        }
+
+        $this->mergeConfigFrom(dirname(__DIR__) . '/config/ddoc.php', 'ddoc');
     }
 }

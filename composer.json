@@ -1,54 +1,55 @@
 {
-  "name": "wxm/ddoc",
-  "type": "library",
-  "description": "基于 laravel 框架, 读取数据库信息生成数据库字典, 通过控制器注释生成API接口文档, 注册 ddoc 路由网页形式呈现",
-  "keywords": [
-    "api",
-    "database",
-    "doc",
-    "laravel"
-  ],
-  "homepage": "https://github.com/qq15725/ddoc",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "wxm",
-      "email": "157215725@qq.com",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "php": "^5.5.9 || ^7.0",
-    "dingo/blueprint": "^0.2"
-  },
-  "require-dev": {
-    "phpunit/phpunit" : "~4.0||~5.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Wxm\\DDoc\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Wxm\\DDoc\\": "tests"
-    }
-  },
-  "scripts": {
-    "test": "phpunit"
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Wxm\\DDoc\\DDocServiceProvider"
-      ]
+    "name": "wxm/ddoc",
+    "type": "library",
+    "description": "基于 laravel 框架, 读取数据库信息生成数据库字典, 通过控制器注释生成API接口文档, 注册 ddoc 路由网页形式呈现",
+    "keywords": [
+        "api",
+        "database",
+        "doc",
+        "laravel"
+    ],
+    "homepage": "https://github.com/qq15725/ddoc",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wxm",
+            "email": "157215725@qq.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3",
     },
-    "branch-alias": {
-      "dev-master": "1.0-dev"
-    }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "minimum-stability": "dev"
+    "require-dev": {
+        "doctrine/dbal": " ~2.3",
+        "doctrine/annotations": "~1.2",
+        "phpunit/phpunit" : "~4.0||~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wxm\\DDoc\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wxm\\DDoc\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wxm\\DDoc\\DDocServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
 }

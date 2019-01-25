@@ -1,9 +1,9 @@
 <?php
+
 namespace Wxm\DDoc\Controllers;
+
 use App\Http\Controllers\Controller;
-use Dingo\Blueprint\Blueprint;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
+use Wxm\DDoc\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
@@ -12,32 +12,19 @@ use ReflectionClass;
 
 class DDocController extends Controller
 {
-
     protected $router;
-
-    /**
-     * Router instance.
-     *
-     * @var null || \Dingo\Api\Routing\Router
-     */
-    protected $dinGoRouter = null;
 
     /**
      * The blueprint instance.
      *
-     * @var \Dingo\Blueprint\Blueprint
+     * @var \Wxm\DDoc\Blueprint
      */
     protected $blueprint;
 
-    public function __construct(Router $router, Blueprint $blueprint)
+    public function __construct(Blueprint $blueprint)
     {
-        $this->router = $router;
-
+        $this->router    = app('router');
         $this->blueprint = $blueprint;
-
-        if (class_exists('\Dingo\Api\Routing\Router')) {
-            $this->dinGoRouter = app(\Dingo\Api\Routing\Router::class);
-        }
     }
 
     /**
@@ -47,9 +34,9 @@ class DDocController extends Controller
     {
         $tables = DB::select('SHOW TABLE STATUS ');
         foreach ($tables as $key => $table) {
-            $columns = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
+            $columns        = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
             $table->columns = $columns;
-            $tables[$key] = $table;
+            $tables[$key]   = $table;
         }
         return $tables;
     }
@@ -64,70 +51,38 @@ class DDocController extends Controller
         return view('ddoc::index');
     }
 
-    public function login(Request $request)
-    {
-        $request->session()->put('ddoc_password', $request->input('password'));
-        return redirect('/ddoc');
-    }
-
     public function readme()
     {
-        if (!$this->auth()) {
-            return '请登录';
-        }
-
         return config('ddoc.readme');
     }
 
+    /**
+     * @return bool
+     * @throws \ReflectionException
+     */
     public function apiDoc()
     {
-        if (!$this->auth()) {
-            return '请登录';
-        }
-
         return $this->blueprint->generate(
             $this->getControllers(),
-            $this->getDocName(),
+            '接口文档',
             $this->getVersion()
         );
     }
 
     public function databaseDoc()
     {
-        if (!$this->auth()) {
-            return '请登录';
-        }
-
-        $title = config('app.name', '') . ' 数据字典';
-
-        $markdown = "## {$title} \r\n";
-        foreach($this->initTablesData() as $key => $table) {
-            $markdown .= "## {$table->Comment} {$table->Name} \r\n";
-            $markdown .= "字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注 \r\n";
-            $markdown .= "--- | --- | --- | -- | ----- | --- | --- \r\n";
-            foreach($table->columns as $column) {
+        $markdown = '';
+        foreach ($this->initTablesData() as $key => $table) {
+            $tableName = $table->Comment ? "{$table->Comment}（{$table->Name}）" : $table->Name;
+            $markdown  .= "## {$tableName} \r\n";
+            $markdown  .= "字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注 \r\n";
+            $markdown  .= "--- | --- | --- | -- | ----- | --- | --- \r\n";
+            foreach ($table->columns as $column) {
                 $markdown .= "{$column->Field} | {$column->Type} | {$column->Null} | {$column->Key} | {$column->Default} | {$column->Extra} | {$column->Comment} \r\n";
             }
+            $markdown .= "\r\n";
         }
         return $markdown;
-    }
-
-    protected function auth()
-    {
-        if (config('ddoc.auth.enable', true)) {
-            return session()->get('ddoc_password') == config('ddoc.auth.password', 'root');
-        }
-        return true;
-    }
-
-    /**
-     * Get the documentation name.
-     *
-     * @return string
-     */
-    protected function getDocName()
-    {
-        return config('app.name', '') . ' 接口文档';
     }
 
     /**
@@ -141,29 +96,26 @@ class DDocController extends Controller
     }
 
     /**
-     * Get all the controller instances.
+     *  Get all the controller instances.
      *
-     * @return array
+     * @return Collection
+     *
+     * @throws \ReflectionException
      */
     protected function getControllers()
     {
         $controllers = new Collection;
-
         foreach ($this->router->getRoutes() as $collections) {
-            $action = $collections->getAction()['uses'];
+            if (method_exists($collections, 'getAction')) {
+                $action = $collections->getAction()['uses'];
+            } elseif (isset($collections['action']) && isset($collections['action']['uses'])) {
+                $action = $collections['action']['uses'];
+            } else {
+                continue;
+            }
             if (is_string($action)) {
                 list($controllerClass, $controllerMethod) = explode('@', $action);
                 $this->addControllerIfNotExists($controllers, app($controllerClass));
-            }
-        }
-
-        if (!is_null($this->dinGoRouter)) {
-            foreach ($this->dinGoRouter->getRoutes() as $collections) {
-                foreach ($collections as $route) {
-                    if ($controller = $route->getControllerInstance()) {
-                        $this->addControllerIfNotExists($controllers, $controller);
-                    }
-                }
             }
         }
 
@@ -175,10 +127,12 @@ class DDocController extends Controller
      * controller implements an interface suffixed with "Docs" it
      * will be used instead of the controller.
      *
-     * @param \Illuminate\Support\Collection $controllers
-     * @param object                         $controller
+     * @param Collection $controllers
+     * @param            $controller
      *
      * @return void
+     *
+     * @throws \ReflectionException
      */
     protected function addControllerIfNotExists(Collection $controllers, $controller)
     {

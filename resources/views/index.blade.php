@@ -1,51 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-    <title>{{ config('app.name', '') }} Doc</title>
-    <link rel="stylesheet" href="{{ asset('vendor/ddoc/css/docute.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ config('ddoc.title', '') }}</title>
+    <link rel="stylesheet" href="{{ config('ddoc.asset_css_path') }}">
+    <style>
+        th, td {
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
 <div id="app"></div>
-<script src="{{ asset('vendor/ddoc/js/docute.js') }}"></script>
+<script src="{{ config('ddoc.asset_js_path') }}"></script>
 <script>
-    docute.init({
-        @if(config('ddoc.auth.enable', true))
-            @if(session()->get('ddoc_password') != config('ddoc.auth.password', 'root'))
-            landing: {
-                source: "/ddoc/login.html"
-            },
-            @endif
-        @endif
-        announcement: {
-            type: 'success',
-            html: 'Welcome to the documentation'
-        },
-        nav: [
-            {
-                title: 'readme',
-                path: '/',
-                source: '/ddoc/readme'
-            },
-            {
-                title: '接口文档',
-                path: '/api',
-                source: '/ddoc/api'
-            },
-            {
-                title: '数据库字典',
-                path: '/database',
-                source: '/ddoc/database'
-            }
-        ],
-        icons: [{
-            icon: 'github',
-            label: '给项目来个 Star 吧 !',
-            link: 'https://github.com/qq15725/ddoc'
-        }]
-    })
+  docute.init({
+    title: "{{ config('ddoc.title', '') }}",
+    tocVisibleDepth: 3,
+    announcement: {!! json_encode(config('ddoc.docute.announcement', []), JSON_UNESCAPED_UNICODE) !!},
+    nav: {!! json_encode(config('ddoc.docute.nav', []), JSON_UNESCAPED_UNICODE) !!},
+    icons: {!! json_encode(config('ddoc.docute.icons', []), JSON_UNESCAPED_UNICODE) !!}
+  })
 </script>
 </body>
 </html>

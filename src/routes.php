@@ -1,17 +1,14 @@
 <?php
 
-Route::group(['middleware' => ['web']], function () {
-    Route::get('ddoc/readme', 'Wxm\DDoc\Controllers\DDocController@readme');
+/** @var Laravel\Lumen\Routing\Router $router */
+$router = app('router');
 
-    Route::get('ddoc/api', 'Wxm\DDoc\Controllers\DDocController@apiDoc');
+$router->get('ddoc/readme.md', 'Wxm\DDoc\Controllers\DDocController@readme');
 
-    Route::get('ddoc/database', 'Wxm\DDoc\Controllers\DDocController@databaseDoc');
+$router->get('ddoc/httpcode.md', 'Wxm\DDoc\Controllers\DDocController@httpCode');
 
-    Route::get('ddoc', ['as' => 'ddoc', 'uses' => 'Wxm\DDoc\Controllers\DDocController@index']);
+$router->get('ddoc/api.md', 'Wxm\DDoc\Controllers\DDocController@apiDoc');
 
-    Route::get('ddoc/login.html', function () {
-        return view('ddoc::login');
-    });
+$router->get('ddoc/database.md', 'Wxm\DDoc\Controllers\DDocController@databaseDoc');
 
-    Route::post('ddoc', 'Wxm\DDoc\Controllers\DDocController@login');
-});
+$router->get('ddoc', ['as' => 'ddoc', 'uses' => 'Wxm\DDoc\Controllers\DDocController@index']);
