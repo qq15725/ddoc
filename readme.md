@@ -5,7 +5,7 @@
 composer.json 添加, `composer update` 安装.
 
 ```php
-"require": {
+"require-dev": {
     "wxm/ddoc": "1.0.*@dev"
 },
 ```

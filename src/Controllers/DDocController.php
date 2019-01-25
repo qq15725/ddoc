@@ -23,6 +23,9 @@ class DDocController extends Controller
 
     public function __construct(Blueprint $blueprint)
     {
+        if (!config('ddoc.enabled', false)) {
+            abort(401);
+        }
         $this->router    = app('router');
         $this->blueprint = $blueprint;
     }
