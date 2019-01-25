@@ -111,10 +111,8 @@ class AuthController extends Controller
 
 ## 参考图
 
-![](http://o9o0gmgkr.bkt.clouddn.com/1.png)
-![](http://o9o0gmgkr.bkt.clouddn.com/2.png)
-![](http://o9o0gmgkr.bkt.clouddn.com/3.png)
-![](http://o9o0gmgkr.bkt.clouddn.com/4.png)
+![](http://res.fdota.com/github/1548414878647.jpg)
+![](http://res.fdota.com/github/1548414898458.jpg)
 
 ## License
 
