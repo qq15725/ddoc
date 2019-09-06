@@ -17,17 +17,17 @@ return [
             [
                 'title'  => '首页',
                 'path'   => '/',
-                'source' => '/ddoc/readme.md'
+                'source' => '/ddoc/readme'
             ],
             [
                 'title'  => '接口文档',
                 'path'   => '/api',
-                'source' => '/ddoc/api.md'
+                'source' => '/ddoc/api'
             ],
             [
                 'title'  => '数据库字典',
                 'path'   => '/database',
-                'source' => '/ddoc/database.md'
+                'source' => '/ddoc/database'
             ]
         ],
         'icons'        => [

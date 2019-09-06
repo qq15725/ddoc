@@ -4,11 +4,15 @@
 $router = app('router');
 
 $router->get('ddoc/readme.md', 'Wxm\DDoc\Controllers\DDocController@readme');
+$router->get('ddoc/readme', 'Wxm\DDoc\Controllers\DDocController@readme');
 
 $router->get('ddoc/httpcode.md', 'Wxm\DDoc\Controllers\DDocController@httpCode');
+$router->get('ddoc/httpcode', 'Wxm\DDoc\Controllers\DDocController@httpCode');
 
 $router->get('ddoc/api.md', 'Wxm\DDoc\Controllers\DDocController@apiDoc');
+$router->get('ddoc/api', 'Wxm\DDoc\Controllers\DDocController@apiDoc');
 
 $router->get('ddoc/database.md', 'Wxm\DDoc\Controllers\DDocController@databaseDoc');
+$router->get('ddoc/database', 'Wxm\DDoc\Controllers\DDocController@databaseDoc');
 
 $router->get('ddoc', ['as' => 'ddoc', 'uses' => 'Wxm\DDoc\Controllers\DDocController@index']);

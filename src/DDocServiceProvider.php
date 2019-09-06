@@ -15,19 +15,14 @@ class DDocServiceProvider extends ServiceProvider
     public function boot()
     {
         // 发布配置
-        $configPath = dirname(__DIR__) . '/config/ddoc.php';
-        if (function_exists('config_path')) {
-            $configPublishPath = config_path('ddoc.php');
-        } else {
-            $configPublishPath = base_path('config/ddoc.php');
-        }
-        $this->publishes([$configPath => $configPublishPath], 'config');
+        $this->publishes([
+            dirname(__DIR__) . '/config/ddoc.php' => function_exists('config_path')
+                ? config_path('ddoc.php')
+                : base_path('config/ddoc.php')
+        ], 'config');
 
         // 注册视图
-        if ($this->app->has('view')) {
-            $viewPath = dirname(__DIR__) . '/resources/views';
-            $this->loadViewsFrom($viewPath, 'ddoc');
-        }
+        $this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'ddoc');
 
         // 注册路由
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
