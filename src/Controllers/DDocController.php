@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use ReflectionClass;
 
-
 class DDocController extends Controller
 {
     protected $router;
@@ -26,7 +25,7 @@ class DDocController extends Controller
         if (!config('ddoc.enabled', false)) {
             abort(401);
         }
-        $this->router    = app('router');
+        $this->router = app('router');
         $this->blueprint = $blueprint;
     }
 
@@ -37,9 +36,9 @@ class DDocController extends Controller
     {
         $tables = DB::select('SHOW TABLE STATUS ');
         foreach ($tables as $key => $table) {
-            $columns        = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
+            $columns = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
             $table->columns = $columns;
-            $tables[$key]   = $table;
+            $tables[$key] = $table;
         }
         return $tables;
     }
@@ -77,9 +76,9 @@ class DDocController extends Controller
         $markdown = '';
         foreach ($this->initTablesData() as $key => $table) {
             $tableName = $table->Comment ? "{$table->Comment}（{$table->Name}）" : $table->Name;
-            $markdown  .= "## {$tableName} \r\n";
-            $markdown  .= "字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注 \r\n";
-            $markdown  .= "--- | --- | --- | -- | ----- | --- | --- \r\n";
+            $markdown .= "## {$tableName} \r\n";
+            $markdown .= "字段 | 类型 | 为空 | 键 | 默认值 | 特性 | 备注 \r\n";
+            $markdown .= "--- | --- | --- | -- | ----- | --- | --- \r\n";
             foreach ($table->columns as $column) {
                 $markdown .= "{$column->Field} | {$column->Type} | {$column->Null} | {$column->Key} | {$column->Default} | {$column->Extra} | {$column->Comment} \r\n";
             }
