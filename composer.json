@@ -24,33 +24,23 @@
         "phpdocumentor/reflection-docblock": "^4.3"
     },
     "require-dev": {
-        "phpunit/phpunit" : "~4.0||~5.0"
+        "laravel/lumen-framework": "5.7.*"
     },
     "autoload": {
         "psr-4": {
             "Wxm\\DDoc\\": "src"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Wxm\\DDoc\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "phpunit"
-    },
     "extra": {
         "laravel": {
             "providers": [
                 "Wxm\\DDoc\\DDocServiceProvider"
             ]
-        },
-        "branch-alias": {
-            "dev-master": "2.0-dev"
         }
     },
     "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev"
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    }
 }

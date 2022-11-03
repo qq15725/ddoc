@@ -4,16 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ config('ddoc.title', '') }}</title>
-    <link rel="stylesheet" href="{{ config('ddoc.asset_css_path') }}">
+    <style>
+        {!! $css !!}
+    </style>
     <style>
         th, td {
             white-space: nowrap;
         }
     </style>
+    <script>
+        {!! $js !!}
+    </script>
 </head>
 <body>
 <div id="app"></div>
-<script src="{{ config('ddoc.asset_js_path') }}"></script>
 <script>
   docute.init({
     title: "{{ config('ddoc.title', '') }}",

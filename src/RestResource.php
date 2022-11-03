@@ -52,8 +52,8 @@ class RestResource extends Section
     /**
      * Create a new resource instance.
      *
-     * @param string                         $identifier
-     * @param \ReflectionClass               $reflector
+     * @param string $identifier
+     * @param \ReflectionClass $reflector
      * @param \Illuminate\Support\Collection $annotations
      * @param \Illuminate\Support\Collection $actions
      *
@@ -61,10 +61,10 @@ class RestResource extends Section
      */
     public function __construct($identifier, ReflectionClass $reflector, Collection $annotations, Collection $actions)
     {
-        $this->identifier  = $identifier;
-        $this->reflector   = $reflector;
+        $this->identifier = $identifier;
+        $this->reflector = $reflector;
         $this->annotations = $annotations;
-        $this->actions     = $actions;
+        $this->actions = $actions;
 
         $this->setResourceOnActions();
     }
@@ -139,7 +139,7 @@ class RestResource extends Section
      */
     public function getDescription()
     {
-        $factory  = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+        $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
         $docblock = $factory->create($this->reflector);
 
         $text = $docblock->getSummary() . $docblock->getDescription();

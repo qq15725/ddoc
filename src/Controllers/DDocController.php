@@ -30,27 +30,21 @@ class DDocController extends Controller
     }
 
     /**
-     * 读取数据库信息
-     */
-    private function initTablesData()
-    {
-        $tables = DB::select('SHOW TABLE STATUS ');
-        foreach ($tables as $key => $table) {
-            $columns = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
-            $table->columns = $columns;
-            $tables[$key] = $table;
-        }
-        return $tables;
-    }
-
-    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        return view('ddoc::index');
+        $pkgRoot = dirname(dirname(__DIR__));
+        return view('ddoc::index', [
+            'css' => file_get_contents(
+                $pkgRoot . '/resources/js/index.css'
+            ),
+            'js' => file_get_contents(
+                $pkgRoot . '/resources/js/index.js'
+            ),
+        ]);
     }
 
     public function readme()
@@ -71,6 +65,9 @@ class DDocController extends Controller
         );
     }
 
+    /**
+     * @return string
+     */
     public function databaseDoc()
     {
         $markdown = '';
@@ -85,6 +82,20 @@ class DDocController extends Controller
             $markdown .= "\r\n";
         }
         return $markdown;
+    }
+
+    /**
+     * @return array
+     */
+    private function initTablesData()
+    {
+        $tables = DB::select('SHOW TABLE STATUS ');
+        foreach ($tables as $key => $table) {
+            $columns = DB::select("SHOW FULL FIELDS FROM {$table->Name}");
+            $table->columns = $columns;
+            $tables[$key] = $table;
+        }
+        return $tables;
     }
 
     /**
