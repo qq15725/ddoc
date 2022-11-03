@@ -107,6 +107,24 @@ class AuthController extends Controller
 }
 ```
 
+## 配置 nginx 身份验证
+
+设置账号密码
+
+```shell
+printf "账号:$(openssl passwd -crypt 密码)\n" >> .htpasswd
+```
+
+配置 nginx
+
+```nginx
+location ~ /ddoc/ {
+  auth_basic "Authorized users only";
+  auth_basic_user_file .htpasswd;
+  try_files $uri /index.php?$query_string;
+}
+```
+
 参考 [API Blueprint Documentation](https://github.com/dingo/api/wiki/API-Blueprint-Documentation).
 
 ## 参考图
