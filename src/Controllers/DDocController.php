@@ -39,7 +39,7 @@ class DDocController extends Controller
         $pkgRoot = dirname(dirname(__DIR__));
         return view('ddoc::index', [
             'css' => file_get_contents(
-                $pkgRoot . '/resources/js/index.css'
+                $pkgRoot . '/resources/css/index.css'
             ),
             'js' => file_get_contents(
                 $pkgRoot . '/resources/js/index.js'
